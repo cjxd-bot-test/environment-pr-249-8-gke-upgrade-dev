@@ -1,29 +1,75 @@
 autoUpdate:
   enabled: false
   schedule: ""
+bootConfigURL: https://github.com/cloudbees/cloudbees-jenkins-x-boot-config.git
 cluster:
-  clusterName: ""
-  environmentGitOwner: ""
+  clusterName: pr-249-8-gke-upgrade
+  environmentGitOwner: cb-kubecd
   environmentGitPublic: true
-  project: ""
-  azure: {}
+  gitKind: github
+  gitName: github
+  gitPublic: true
+  gitServer: https://github.com
+  namespace: jx
+  project: jenkins-x-bdd3
   provider: gke
-  zone: ""
-gitops: true
+  registry: gcr.io
+  zone: europe-west1-c
 environments:
-  - key: dev
-  - key: staging
-  - key: production
+- ingress:
+    cloud_dns_secret_name: external-dns-gcp-sa
+    domain: cjxdu3.bdd.jenkins-x.rocks
+    externalDNS: true
+    namespaceSubDomain: -jx.
+    tls:
+      email: jenkins-x@googlegroups.com
+      enabled: true
+      production: true
+  key: dev
+  repository: environment-pr-249-8-gke-upgrade-dev
+- gitKind: github
+  gitServer: https://github.com
+  ingress:
+    domain: ""
+    externalDNS: false
+    namespaceSubDomain: ""
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: staging
+  owner: cb-kubecd
+  repository: environment-pr-249-8-gke-upgrade-staging
+- gitKind: github
+  gitServer: https://github.com
+  ingress:
+    domain: ""
+    externalDNS: false
+    namespaceSubDomain: ""
+    tls:
+      email: ""
+      enabled: false
+      production: false
+  key: production
+  owner: cb-kubecd
+  repository: environment-pr-249-8-gke-upgrade-production
+gitops: true
 ingress:
-  domain: ""
-  externalDNS: false
+  cloud_dns_secret_name: external-dns-gcp-sa
+  domain: cjxdu3.bdd.jenkins-x.rocks
+  externalDNS: true
+  namespaceSubDomain: -jx.
   tls:
-    email: ""
-    enabled: false
-    production: false
+    email: jenkins-x@googlegroups.com
+    enabled: true
+    production: true
 kaniko: true
+repository: nexus
 secretStorage: vault
 storage:
+  backup:
+    enabled: false
+    url: ""
   logs:
     enabled: true
     url: ""
@@ -33,7 +79,12 @@ storage:
   repository:
     enabled: true
     url: ""
+vault:
+  disableURLDiscovery: true
+velero:
+  schedule: ""
+  ttl: ""
 versionStream:
-  ref: 2.1.78+cjxd.11
+  ref: v0.0.36
   url: https://github.com/cloudbees/cloudbees-jenkins-x-versions.git
-webhook: lighthouse
+webhook: prow
